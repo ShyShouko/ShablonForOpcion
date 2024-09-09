@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр заказа</title>
+    <style th:inline="css">
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            font-size: 12px;
+            overflow: hidden;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .form-section {
+            margin-bottom: 10px;
+        }
+        .field-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 3px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #f9f9f9; /* Отображаем как только для чтения */
+        }
+        textarea {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #f9f9f9; /* Отображаем как только для чтения */
+            resize: vertical;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+        .footer-field {
+            flex: 1;
+            margin-right: 10px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .button-container #printButton {
+            background-color: #3498db;
+            color: white;
+        }
+        .button-container button:hover {
+            opacity: 0.8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .product-header, .requirements-header {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            background-color: #f8f8f8;
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+        }
+        .product-table th:first-child {
+            width: 20%;
+        }
+        .product-table th:not(:first-child) {
+            width: 8.8%;
+        }
+        .requirements-table td {
+            height: 20px;
+            vertical-align: top;
+        }
+        .spacer {
+            height: 250px;
+        }
+        .hidden-print {
+            display: none;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+            .container {
+                transform: scale(0.8);
+                transform-origin: top left;
+                width: 125%;
+                height: 125%;
+                box-shadow: none;
+                padding: 0;
+            }
+            .button-container {
+                display: none;
+            }
+            .hidden-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form>
+        <div class="header">
+            <div class="form-section">
+                <table>
+                    <tr>
+                        <th>№ ТЗ</th>
+                        <th>Менеджер</th>
+                        <th>Повтор тиража</th>
+                        <th>Договор Счёт №</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" th:value="${description.number}" readonly></td>
+                        <td><input type="text" th:value="${description.manager}" readonly></td>
+                        <td><input type="text" th:value="${description.rerun}" readonly></td>
+                        <td><input type="text" th:value="${description.invoiceagreement}" readonly></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="field-group">
+                <label for="customer">Заказчик:</label>
+                <input type="text" id="customer" th:value="${description.customer}" readonly>
+            </div>
+        </div>
+
+        <div class="product-header">ПРОДУКЦИЯ</div>
+        <table id="productTable" class="product-table">
+            <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Уровень защиты</th>
+                <th>Красочность</th>
+                <th>Формат</th>
+                <th>Материал</th>
+                <th>Тираж</th>
+                <th>Кол-во знаков</th>
+                <th>Нумерация</th>
+                <th>Серия</th>
+                <th>Цвет номера</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${description.products}">
+                <td><input type="text" th:value="${product.productName}" readonly></td>
+                <td><input type="text" th:value="${product.protectioNumber}" readonly></td>
+                <td><input type="text" th:value="${product.colorfulness}" readonly></td>
+                <td><input type="text" th:value="${product.format}" readonly></td>
+                <td><input type="text" th:value="${product.material}" readonly></td>
+                <td><input type="number" th:value="${product.run}" readonly></td>
+                <td><input type="number" th:value="${product.characters}" readonly></td>
+                <td><input type="text" th:value="${product.numeric}" readonly></td>
+                <td><input type="text" th:value="${product.serial}" readonly></td>
+                <td><input type="text" th:value="${product.colorOfNumber}" readonly></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="requirements-header">ТРЕБОВАНИЯ</div>
+        <table class="requirements-table">
+            <tr>
+                <th>Печатные способы защиты</th>
+                <th>Тиснение</th>
+                <th>Переплетные операции</th>
+                <th>Упаковка</th>
+                <th>Необходимо заготовить и закупить</th>
+                <th>Дополнительные условия</th>
+            </tr>
+            <tr>
+                <td><textarea type="text" id="protection" th:value="${description.protection}" ></textarea></td>
+                <td><textarea type="text" id="embossing" th:value="${description.embossing}" ></textarea></td>
+                <td><textarea type="text" id="bookOp" th:value="${description.bookOp}" ></textarea></td>
+                <td><textarea type="text" id="box" th:value="${description.box}"></textarea></td>
+                <td><textarea type="text" id="needHelp" th:value="${description.needHelp}" ></textarea></td>
+                <td><textarea type="text" id="addCond" th:value="${description.addCond}" ></textarea></td>
+            </tr>
+        </table>
+
+        <div class="spacer"></div>
+
+        <div class="footer">
+            <div class="footer-field">
+                <label for="dateReception">Дата приема заказа:</label>
+                <input type="date" id="dateReception" th:value="${description.dateReception}" readonly>
+            </div>
+            <div class="footer-field">
+                <label for="dateOfLayout">Дата сдачи макета на утверждение:</label>
+                <input type="date" id="dateOfLayout" th:value="${description.dateOfLayout}" readonly>
+            </div>
+            <div class="footer-field">
+                <label for="dateRun">Дата сдачи тиража:</label>
+                <input type="date" id="dateRun" th:value="${description.dateRun}" readonly>
+            </div>
+        </div>
+        <div class="button-container">
+            <button id="printButton" type="button" onclick="window.print()">Печать</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+

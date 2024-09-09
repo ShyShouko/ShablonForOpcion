@@ -1,0 +1,582 @@
+ <h2>Печатные способы защиты</h2>
+                    <ul id="protectionList">
+                        <li data-value="Микротекст">Микротекст <button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="УФ">УФ <button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="Химзащита">Химзащита <button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="Токопроводящая">Токопроводящая <button class="remove-btn" aria-label="Удалить">x</button></li>
+                    </ul>
+                </div>
+                <div class="list-column">
+                    <h2>Тиснение</h2>
+                    <ul id="embossingList">
+                        <li data-value="Тиснение">Тиснение <button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="Микрорельефное">Дебоссинг <button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="Конгрев">Конгрев <button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="Надсечка">Надсечка <button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="Блинт">Блинт <button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="Вырубка">Вырубка<button class="remove-btn" aria-label="Удалить">x</button></li>
+                        <li data-value="Изготовление защитной наклейки">Изготовление защитной наклейки<button class="remove-btn" aria-label="Удалить">x</button></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!DOCTYPE html>
+            <html lang="ru" xmlns:th="http://www.thymeleaf.org">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Форма заказа</title>
+                <style th:inline="css">
+                    body {
+                        font-family: Arial, sans-serif;
+                        line-height: 1.4;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                        font-size: 12px;
+                        overflow: hidden; /* Избегаем прокрутки всего документа */
+                    }
+                    .container {
+                        background-color: #fff;
+                        padding: 20px;
+                        border-radius: 5px;
+                        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                        box-sizing: border-box; /* Включаем padding в ширину элемента */
+                        display: flex;
+                        flex-direction: column;
+                        min-height: 100vh;
+                        max-height: 100vh; /* Обеспечиваем максимальную высоту контейнера */
+                        overflow-y: auto; /* Добавляем вертикальную прокрутку, если содержимое превышает высоту контейнера */
+                    }
+                    .header {
+                        margin-bottom: 20px;
+                    }
+                    .form-section {
+                        margin-bottom: 10px;
+                    }
+                    .field-group {
+                        margin-bottom: 10px;
+                    }
+                    label {
+                        display: block;
+                        margin-bottom: 3px;
+                        font-weight: bold;
+                    }
+                    input[type="text"], input[type="number"], input[type="date"] {
+                        width: 100%;
+                        padding: 6px;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        box-sizing: border-box;
+                    }
+                    .footer {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: auto;
+                    }
+                    .footer-field {
+                        flex: 1;
+                        margin-right: 10px;
+                    }
+                    .button-container {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: 20px;
+                    }
+                    .button-container button {
+                        padding: 8px 16px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 14px;
+                    }
+                    .button-container button[type="submit"] {
+                        background-color: #FF0000;
+                        color: white;
+                    }
+                    .button-container #printButton {
+                        background-color: #3498db;
+                        color: white;
+                    }
+                    .button-container button:hover {
+                        opacity: 0.8;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 10px;
+                    }
+                    th, td {
+                        border: 1px solid #bdc3c7;
+                        padding: 8px;
+                        text-align: left;
+                    }
+                    th {
+                        background-color: #f8f8f8;
+                        font-weight: bold;
+                        color: #2c3e50;
+                    }
+                    td input, td textarea {
+                        width: 100%;
+                        padding: 4px;
+                        border: none;
+                        font-size: 12px;
+                        resize: vertical;
+                    }
+                    .product-header, .requirements-header {
+                        text-align: center;
+                        font-size: 14px;
+                        font-weight: bold;
+                        margin: 10px 0 5px 0;
+                        background-color: #f8f8f8;
+                        padding: 8px;
+                        border: 1px solid #bdc3c7;
+                    }
+                    .product-table th:first-child {
+                        width: 20%;
+                    }
+                    .product-table th:not(:first-child) {
+                        width: 8.8%;
+                    }
+                    .requirements-table td {
+                        height: 20px;
+                        vertical-align: top;
+                    }
+                    #customer {
+                        width: 100%;
+                        padding: 8px;
+                        font-size: 14px;
+                    }
+                    .spacer {
+                        height: 140px;
+                    }
+                    .customer-group {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 10px;
+                    }
+                    .customer-group label {
+                        margin-right: 10px;
+                        white-space: nowrap;
+                    }
+                    .customer-group input {
+                        flex-grow: 1;
+                    }
+
+                    @media print {
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            width: 100%;
+                            height: 100%;
+                        }
+                        .container {
+                            transform: scale(0.8);
+                            transform-origin: top left;
+                            width: 125%;
+                            height: 125%;
+                            box-shadow: none; /* Убираем тень при печати */
+                            padding: 0;
+                        }
+                        .button-container {
+                            display: none; /* Скрываем кнопки при печати */
+                        }
+                        .hidden-print {
+                            display: none; /* Скрытие дополнительных списков при печати */
+                        }
+                    }
+
+                    /* Стили для двух столбцов */
+                    .list-container {
+                        display: flex;
+                        gap: 20px;
+                        margin: 20px 0;
+                    }
+                    .list-column {
+                        flex: 1;
+                        min-width: 0;
+                    }
+                    .list-container ul {
+                        list-style-type: none;
+                        padding: 0;
+                        max-height: 300px; /* Ограничиваем высоту списка и добавляем прокрутку */
+                        overflow-y: auto;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                    }
+                    .list-container ul li {
+                        cursor: pointer;
+                        margin: 5px 0;
+                        padding: 5px;
+                        position: relative; /* Для позиционирования кнопки удаления */
+                    }
+                    .list-container ul li:hover {
+                        background-color: #f0f0f0;
+                    }
+                    .remove-btn {
+                        position: absolute;
+                        right: 5px;
+                        top: 5px;
+                        background-color: #ff6b6b;
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        width: 20px;
+                        height: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        font-size: 12px;
+                    }
+                    .remove-btn:hover {
+                        background-color: #ff4757;
+                    }
+                    .selected-items {
+                        margin-top: 20px;
+                    }
+                    .selected-items h3 {
+                        margin-bottom: 10px;
+                    }
+                    .selected-items ul {
+                        list-style-type: none;
+                        padding: 0;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        max-height: 150px; /* Ограничиваем высоту списка выбранных элементов */
+                        overflow-y: auto;
+                    }
+                    .selected-items ul li {
+                        padding: 5px;
+                        border-bottom: 1px solid #ddd;
+                        position: relative; /* Для позиционирования кнопки удаления */
+                    }
+                    .add-row-button {
+                        margin-top: 10px;
+                        padding: 6px 12px;
+                        border: none;
+                        border-radius: 4px;
+                        background-color: #2ecc71;
+                        color: white;
+                        cursor: pointer;
+                        font-size: 14px;
+                    }
+                    .add-row-button:hover {
+                        opacity: 0.8;
+                    }
+                </style>
+            </head>
+            <body>
+            <div class="container">
+                <form th:object="${description}" method="POST"
+                      th:action="${description.id != null ? '/edit/' + description.id : '/submit'}">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="header">
+                        <div class="form-section">
+                            <table>
+                                <tr>
+                                    <th>№ ТЗ</th>
+                                    <th>Менеджер</th>
+                                    <th>Повтор тиража</th>
+                                    <th>Договор Счёт №</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" id="numberInput" th:field="*{number}"></td>
+                                    <td><input type="text" id="manager" th:field="*{manager}"></td>
+                                    <td><input type="text" id="rerun" th:field="*{rerun}"></td>
+                                    <td><input type="text" id="invoiceagreement" th:field="*{invoiceagreement}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="customer-group">
+                            <label for="customer">Заказчик:</label>
+                            <input type="text" id="customer" th:field="*{customer}">
+                        </div>
+                    </div>
+
+                    <div class="product-header">ПРОДУКЦИЯ</div>
+                    <table id="productTable" class="product-table">
+                        <thead>
+                        <tr>
+                            <th>Наименование</th>
+                            <th>Уровень защиты</th>
+                            <th>Красочность</th>
+                            <th>Формат</th>
+                            <th>Материал</th>
+                            <th>Тираж</th>
+                            <th>Кол-во знаков</th>
+                            <th>Нумерация</th>
+                            <th>Серия</th>
+                            <th>Цвет номера</th>
+                            <th>Действия</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product, iter : ${description.products}">
+                            <td><input type="text" th:field="*{products[__${iter.index}__].productName}" /></td>
+                            <td><input type="text" th:field="*{products[__${iter.index}__].protectioNumber}" /></td>
+                            <td><input type="text" th:field="*{products[__${iter.index}__].colorfulness}" /></td>
+                            <td><input type="text" th:field="*{products[__${iter.index}__].format}" /></td>
+                            <td><input type="text" th:field="*{products[__${iter.index}__].material}" /></td>
+                            <td><input type="number" th:field="*{products[__${iter.index}__].run}" /></td>
+                            <td><input type="number" th:field="*{products[__${iter.index}__].characters}" /></td>
+                            <td><input type="text" th:field="*{products[__${iter.index}__].numeric}" /></td>
+                            <td><input type="text" th:field="*{products[__${iter.index}__].serial}" /></td>
+                            <td><input type="text" th:field="*{products[__${iter.index}__].colorOfNumber}" /></td>
+                            <td><button type="button" onclick="removeRow(this)">Удалить</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" onclick="addRow()">Добавить строку</button>
+                    <input type="submit" value="Сохранить">
+
+
+                    <div class="requirements-header">ТРЕБОВАНИЯ</div>
+
+                    <table class="requirements-table">
+                        <tr>
+                            <th>Печатные способы защиты</th>
+                            <th>Тиснение</th>
+                            <th>Переплетные операции</th>
+                            <th>Упаковка</th>
+                            <th>Необходимо заготовить и закупить</th>
+                            <th>Дополнительные условия</th>
+                        </tr>
+                        <tr>
+                            <td><textarea id="protection" th:field="*{protection}"></textarea></td>
+                            <td><textarea id="embossing" th:field="*{embossing}"></textarea></td>
+                            <td><textarea id="bookOp" th:field="*{bookOp}"></textarea></td>
+                            <td><textarea id="box" th:field="*{box}"></textarea></td>
+                            <td><textarea id="needHelp" th:field="*{needHelp}"></textarea></td>
+                            <td><textarea id="addCond" th:field="*{addCond}"></textarea></td>
+                        </tr>
+                    </table>
+
+                    <div class="spacer"></div>
+
+                    <div class="footer">
+                        <div class="footer-field">
+                            <label for="dateReception">Дата приема заказа:</label>
+                            <input type="date" id="dateReception" th:field="*{dateReception}">
+                        </div>
+                        <div class="footer-field">
+                            <label for="dateOfLayout">Дата сдачи макета на утверждение:</label>
+                            <input type="date" id="dateOfLayout" th:field="*{dateOfLayout}">
+                        </div>
+                        <div class="footer-field">
+                            <label for="dateRun">Дата сдачи тиража:</label>
+                            <input type="date" id="dateRun" th:field="*{dateRun}">
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button id="printButton" type="button" onclick="window.print()">Печать</button>
+                        <button type="submit">Отправить</button>
+                    </div>
+
+                    <!-- Интерактивные списки -->
+                    <div class="hidden-print">
+                        <div class="list-container">
+                            <div class="list-column">
+                                <h2>Печатные способы защиты</h2>
+                                <ul id="protectionList">
+                                    <li data-value="Микротекст">Микротекст <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="УФ">УФ <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="Химзащита">Химзащита <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="Токопроводящая">Токопроводящая <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                </ul>
+                            </div>
+                            <div class="list-column">
+                                <h2>Тиснение</h2>
+                                <ul id="embossingList">
+                                    <li data-value="Тиснение">Тиснение <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="Микрорельефное">Микрорельефное <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="Конгрев">Конгрев <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="Надсечка">Надсечка <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="Блинт">Блинт <button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="Вырубка">Вырубка<button class="remove-btn" aria-label="Удалить">x</button></li>
+                                    <li data-value="Изготовление защитной наклейки">Изготовление защитной наклейки<button class="remove-btn" aria-label="Удалить">x</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="selected-items">
+                            <h3>Выбранные элементы:</h3>
+                            <div class="list-column">
+                                <h4>Печатные способы защиты</h4>
+                                <ul id="selectedProtection"></ul>
+                            </div>
+                            <div class="list-column">
+                                <h4>Тиснение</h4>
+                                <ul id="selectedEmbossing"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                // Функция для добавления строки в таблицу
+                function addRow() {
+                    const tableBody = document.querySelector('#productTable tbody');
+                    const rowCount = tableBody.rows.length;
+                    const newRow = tableBody.insertRow();
+
+                    newRow.innerHTML = `
+                        <td><input type="text" name="products[${rowCount}].productName" /></td>
+                        <td><input type="text" name="products[${rowCount}].protectioNumber" /></td>
+                        <td><input type="text" name="products[${rowCount}].colorfulness" /></td>
+                        <td><input type="text" name="products[${rowCount}].format" /></td>
+                        <td><input type="text" name="products[${rowCount}].material" /></td>
+                        <td><input type="number" name="products[${rowCount}].run" /></td>
+                        <td><input type="number" name="products[${rowCount}].characters" /></td>
+                        <td><input type="text" name="products[${rowCount}].numeric" /></td>
+                        <td><input type="text" name="products[${rowCount}].serial" /></td>
+                        <td><input type="text" name="products[${rowCount}].colorOfNumber" /></td>
+                        <td><button type="button" onclick="removeRow(this)">Удалить</button></td>
+                    `;
+                }
+
+                // Функция для удаления строки из таблицы
+                function removeRow(button) {
+                    const row = button.closest('tr');
+                    row.remove();
+                }
+
+                // Функция для обработки кликов по элементам списка
+                function handleListClick(event) {
+                    if (event.target.tagName === 'LI') {
+                        const value = event.target.getAttribute('data-value');
+                        const listId = event.target.parentNode.id;
+
+                        // Добавляем выбранное значение в соответствующий список
+                        const targetList = listId === 'protectionList' ? 'selectedProtection' : 'selectedEmbossing';
+                        const targetTextarea = listId === 'protectionList' ? 'protection' : 'embossing';
+                        const selectedItemsList = document.getElementById(targetList);
+
+                        // Проверяем, если элемент уже выбран
+                        if (!Array.from(selectedItemsList.children).some(li => li.textContent.includes(value))) {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = value;
+                            const removeBtn = document.createElement('button');
+                            removeBtn.textContent = 'x';
+                            removeBtn.className = 'remove-btn';
+                            removeBtn.addEventListener('click', function() {
+                                listItem.remove();
+                                const existingValues = document.getElementById(targetTextarea).value.split(',').map(v => v.trim()).filter(v => v !== value);
+                                document.getElementById(targetTextarea).value = existingValues.join(', ');
+                            });
+                            listItem.appendChild(removeBtn);
+                            selectedItemsList.appendChild(listItem);
+
+                            // Добавляем значение в соответствующее поле textarea
+                            const existingValues = document.getElementById(targetTextarea).value.split(',').map(v => v.trim()).filter(v => v);
+                            existingValues.push(value);
+                            document.getElementById(targetTextarea).value = existingValues.join(', ');
+                        }
+                    }
+                }
+                // Установка обработчиков событий для кликов по спискам
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('protectionList').addEventListener('click', handleListClick);
+                    document.getElementById('embossingList').addEventListener('click', handleListClick);
+
+                    // Добавление обработчика для кнопки добавления строки
+                    document.getElementById('addRowButton').addEventListener('click', addRow);
+
+                    // Инициализация даты в поле "Дата приема заказа"
+                    document.addEventListener('DOMContentLoaded', function() {
+                        let today = new Date().toISOString().split('T')[0];
+                        document.getElementById('dateReception').value = today;
+                    });
+                });
+            </script>
+            </body>
+            </html>
+
+            <tr>
+                            <td><input type="text" id="productName1" th:field="*{productName1}"></td>
+                            <td><input type="text" id="protectioNumber1" th:field="*{protectioNumber1}"></td>
+                            <td><input type="text" id="colorfulness1" th:field="*{colorfulness1}"></td>
+                            <td><input type="text" id="format1" th:field="*{format1}"></td>
+                            <td><input type="text" id="material1" th:field="*{material1}"></td>
+                            <td><input type="number" id="run1" th:field="*{run1}"></td>
+                            <td><input type="number" id="characters1" th:field="*{characters1}"></td>
+                            <td><input type="text" id="numeric1" th:field="*{numeric1}"></td>
+                            <td><input type="text" id="serial1" th:field="*{serial1}"></td>
+                            <td><input type="text" id="colorOfNumber1" th:field="*{colorOfNumber1}"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="productName2" th:field="*{productName2}"></td>
+                            <td><input type="text" id="protectioNumber2" th:field="*{protectioNumber2}"></td>
+                            <td><input type="text" id="colorfulness2" th:field="*{colorfulness2}"></td>
+                            <td><input type="text" id="format2" th:field="*{format2}"></td>
+                            <td><input type="text" id="material2" th:field="*{material2}"></td>
+                            <td><input type="number" id="run2" th:field="*{run2}"></td>
+                            <td><input type="number" id="characters2" th:field="*{characters2}"></td>
+                            <td><input type="text" id="numeric2" th:field="*{numeric2}"></td>
+                            <td><input type="text" id="serial2" th:field="*{serial2}"></td>
+                            <td><input type="text" id="colorOfNumber2" th:field="*{colorOfNumber2}"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="productName3" th:field="*{productName3}"></td>
+                            <td><input type="text" id="protectioNumber3" th:field="*{protectioNumber3}"></td>
+                            <td><input type="text" id="colorfulness3" th:field="*{colorfulness3}"></td>
+                            <td><input type="text" id="format3" th:field="*{format3}"></td>
+                            <td><input type="text" id="material3" th:field="*{material3}"></td>
+                            <td><input type="number" id="run3" th:field="*{run3}"></td>
+                            <td><input type="number" id="characters3" th:field="*{characters3}"></td>
+                            <td><input type="text" id="numeric3" th:field="*{numeric3}"></td>
+                            <td><input type="text" id="serial3" th:field="*{serial3}"></td>
+                            <td><input type="text" id="colorOfNumber3" th:field="*{colorOfNumber3}"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="productName4" th:field="*{productName4}"></td>
+                            <td><input type="text" id="protectioNumber4" th:field="*{protectioNumber4}"></td>
+                            <td><input type="text" id="colorfulness4" th:field="*{colorfulness4}"></td>
+                            <td><input type="text" id="format4" th:field="*{format4}"></td>
+                            <td><input type="text" id="material4" th:field="*{material4}"></td>
+                            <td><input type="number" id="run4" th:field="*{run4}"></td>
+                            <td><input type="number" id="characters4" th:field="*{characters4}"></td>
+                            <td><input type="text" id="numeric4" th:field="*{numeric4}"></td>
+                            <td><input type="text" id="serial4" th:field="*{serial4}"></td>
+                            <td><input type="text" id="colorOfNumber4" th:field="*{colorOfNumber4}"></td>
+                        </tr>
+
+                        <tr>
+                                        <td><input type="text" id="productName" th:field="*{productName}"></td>
+                                        <td><input type="text" id="protectioNumber" th:field="*{protectioNumber}"></td>
+                                        <td><input type="text" id="colorfulness" th:field="*{colorfulness}"></td>
+                                        <td><input type="text" id="format" th:field="*{format}"></td>
+                                        <td><input type="text" id="material" th:field="*{material}"></td>
+                                        <td><input type="number" id="run" th:field="*{run}"></td>
+                                        <td><input type="number" id="characters" th:field="*{characters}"></td>
+                                        <td><input type="text" id="numeric" th:field="*{numeric}"></td>
+                                        <td><input type="text" id="serial" th:field="*{serial}"></td>
+                                        <td><input type="text" id="colorOfNumber" th:field="*{colorOfNumber}"></td>
+                                        <td><button type="button" class="remove-btn" onclick="removeRow(this)">Удалить</button></td>
+                                    </tr>
+
+                                    function addRow() {
+                                            var tableBody = document.querySelector('#productTable tbody');
+                                            var newRow = document.createElement('tr');
+
+                                            newRow.innerHTML = `
+                                                <td><input type="text" name="productName[]"></td>
+                                                <td><input type="text" name="protectioNumber[]"></td>
+                                                <td><input type="text" name="colorfulness[]"></td>
+                                                <td><input type="text" name="format[]"></td>
+                                                <td><input type="text" name="material[]"></td>
+                                                <td><input type="number" name="run[]"></td>
+                                                <td><input type="number" name="characters[]"></td>
+                                                <td><input type="text" name="numeric[]"></td>
+                                                <td><input type="text" name="serial[]"></td>
+                                                <td><input type="text" name="colorOfNumber[]"></td>
+                                                <td><button type="button" class="remove-btn" onclick="removeRow(this)">Удалить</button></td>
+                                            `;
+
+                                            tableBody.appendChild(newRow);
+                                        }
+
+                                        function removeRow(button) {
+                                            var row = button.closest('tr');
+                                            row.remove();
+                                        }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кнопка-счетчик</title>
+    <style>
+        #counter {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+<button id="incrementButton">Увеличить</button>
+
+<script>
+    // Получаем ссылки на элементы
+    const counterElement = document.getElementById('counter');
+    const buttonElement = document.getElementById('incrementButton');
+
+    // Инициализируем счетчик
+    let count = 0;
+
+    // Добавляем обработчик события для кнопки
+    buttonElement.addEventListener('click', () => {
+        count++; // Увеличиваем счетчик
+        counterElement.textContent = count; // Обновляем текст элемента счетчика
+    });
+</script>
+</body>
+</html>

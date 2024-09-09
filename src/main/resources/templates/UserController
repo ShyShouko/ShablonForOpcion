@@ -1,0 +1,36 @@
+package com.example.demo.controller;
+
+import com.example.demo.model.User;
+import com.example.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/")
+    public String getLogin() {
+        return "login"; // Страница аутентификации
+    }
+
+    @PostMapping("/login")
+    public String postUser(Model model, User user) {
+        // Проверяем пользователя
+        boolean isAuthenticated = userService.authenticate(user);
+
+        if (isAuthenticated) {
+            // Переход на главную страницу после успешной аутентификации
+            return "redirect:/base";
+        }
+
+        // Если аутентификация не удалась, возвращаемся на страницу аутентификации с сообщением
+        model.addAttribute("message", "Неверный логин или пароль");
+        return "login";
+    }
+}
